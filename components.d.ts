@@ -12,6 +12,7 @@ declare module 'vue' {
     NavBar: typeof import('./src/components/core/NavBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    ToggleTheme: typeof import('./src/components/core/ToggleTheme.vue')['default']
     WapperPost: typeof import('./src/components/WapperPost.vue')['default']
     WrapperPhoto: typeof import('./src/components/wappers/WrapperPhoto.vue')['default']
     WrapperPost: typeof import('./src/components/wappers/WrapperPost.vue')['default']
