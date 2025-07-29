@@ -13,12 +13,14 @@
     "vue": "^3.5.17"
   },
   "devDependencies": {
+    "@iconify/json": "^2.2.363",
     "@types/node": "^24.1.0",
     "@unhead/vue": "^2.0.12",
     "@vitejs/plugin-vue": "^6.0.0",
     "@vue/tsconfig": "^0.7.0",
     "typescript": "~5.8.3",
     "unplugin-auto-import": "^19.3.0",
+    "unplugin-icons": "^22.2.0",
     "unplugin-vue-components": "^28.8.0",
     "unplugin-vue-markdown": "^29.1.0",
     "unplugin-vue-router": "^0.14.0",

@@ -13,7 +13,8 @@
     "types": [
       "node",
       "vite/client",
-      "unplugin-vue-router/client"
+      "unplugin-vue-router/client",
+      "unplugin-icons/types/vue"
     ],
     "strict": true,
     "esModuleInterop": true,

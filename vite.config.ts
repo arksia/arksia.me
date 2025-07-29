@@ -5,6 +5,7 @@ import VueRouter from 'unplugin-vue-router/vite'
 import Markdown from 'unplugin-vue-markdown/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
+import Icons from 'unplugin-icons/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -33,6 +34,8 @@ export default defineConfig({
       dts: true,
       include: [/\.vue$/, /\.vue\?vue/, /\.md$/]
     }),
-
+    Icons({
+      compiler: 'vue3',
+    }),
   ],
 })

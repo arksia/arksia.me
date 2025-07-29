@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import GithubIcon from '~icons/uil/github-alt'
+
 function toTop() {
   window.scrollTo({
     top: 0,
@@ -10,19 +12,22 @@ function toTop() {
 <template>
   <header class="header">
     <nav class="nav">
-      <ToggleTheme />
-      <div class="links">
+      <div class="routes">
         <RouterLink to="/posts" title="Post">
           <span class="router-link">Posts</span>
         </RouterLink>
         <RouterLink to="/photos" title="Photos">
           <span class="router-link">Photos</span>
         </RouterLink>
-        <!-- <a href="https://github.com/arksia" target="_blank" title="GitHub">
-          <div i-uil-github-alt />
-        </a> -->
       </div>
-      <ToggleTheme />
+
+        
+      <div class="links" style="float: right;">
+        <a href="https://github.com/arksia" target="_blank" title="GitHub">
+          <GithubIcon />
+        </a>
+        <ToggleTheme />
+      </div>
     </nav>
   </header>
 </template>
@@ -39,10 +44,9 @@ function toTop() {
 }
 
 .nav {
-  padding: 1rem;
+  padding: 1.5rem 2rem;
   width: 100%;
   display: flex;
-  justify-content: space-between;
   box-sizing: border-box;
 }
 
@@ -60,7 +64,16 @@ function toTop() {
   text-decoration-color: inherit;
 }
 
+.routes {
+  margin-left: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  gap: 1rem;
+  grid-auto-flow: column;
+}
+
 .links {
+  margin-left: auto;
   display: grid;
   gap: 1rem;
   grid-auto-flow: column;
