@@ -1,23 +1,26 @@
 {
   "name": "arksia.me",
-  "private": true,
-  "version": "0.0.0",
   "type": "module",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
     "dev": "vite --open",
     "build": "vite-ssg build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint --fix"
   },
   "dependencies": {
     "@vueuse/core": "^13.5.0",
     "vue": "^3.5.17"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^5.0.0",
     "@iconify/json": "^2.2.363",
     "@types/node": "^24.1.0",
     "@unhead/vue": "^2.0.12",
     "@vitejs/plugin-vue": "^6.0.0",
     "@vue/tsconfig": "^0.7.0",
+    "eslint": "^9.32.0",
     "typescript": "~5.8.3",
     "unplugin-auto-import": "^19.3.0",
     "unplugin-icons": "^22.2.0",

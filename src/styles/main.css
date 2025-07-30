@@ -10,6 +10,7 @@ html {
   background-color: var(--c-bg);
   overflow-x: hidden;
   overflow-y: scroll;
+  line-height: 1.5;
 }
 
 html.dark {
@@ -18,7 +19,6 @@ html.dark {
   --c-scrollbar: #111;
   --c-scrollbar-hover: #222;
 }
-
 
 body {
   margin: 0;

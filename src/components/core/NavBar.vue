@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import GithubIcon from '~icons/uil/github-alt'
 
-function toTop() {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth',
-  })
-}
+// function toTop() {
+//   window.scrollTo({
+//     top: 0,
+//     behavior: 'smooth',
+//   })
+// }
 </script>
 
 <template>
@@ -21,7 +21,6 @@ function toTop() {
         </RouterLink>
       </div>
 
-        
       <div class="links" style="float: right;">
         <a href="https://github.com/arksia" target="_blank" title="GitHub">
           <GithubIcon />

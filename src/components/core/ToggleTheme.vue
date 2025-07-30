@@ -1,11 +1,11 @@
 <script setup lang='ts'>
-import SunIcon from '~icons/ri/sun-line'
 import MoonIcon from '~icons/ri/moon-line'
+import SunIcon from '~icons/ri/sun-line'
 
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
 
-const handleToggle = () => {
+function handleToggle() {
   toggleDark()
 }
 </script>
