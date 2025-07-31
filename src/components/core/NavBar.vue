@@ -14,14 +14,14 @@ import GithubIcon from '~icons/uil/github-alt'
     <nav class="nav">
       <div class="routes">
         <RouterLink to="/posts" title="Post">
-          <span class="router-link">Posts</span>
+          <span>Posts</span>
         </RouterLink>
         <RouterLink to="/photos" title="Photos">
-          <span class="router-link">Photos</span>
+          <span>Photos</span>
         </RouterLink>
       </div>
 
-      <div class="links" style="float: right;">
+      <div class="links">
         <a href="https://github.com/arksia" target="_blank" title="GitHub">
           <GithubIcon />
         </a>
@@ -44,12 +44,13 @@ import GithubIcon from '~icons/uil/github-alt'
 
 .nav {
   padding: 1.5rem 2rem;
-  width: 100%;
   display: flex;
+  align-items: center;
   box-sizing: border-box;
 }
 
 .nav a {
+  display: block;
   cursor: pointer;
   text-decoration: none;
   color: inherit;
@@ -76,5 +77,9 @@ import GithubIcon from '~icons/uil/github-alt'
   display: grid;
   gap: 1rem;
   grid-auto-flow: column;
+}
+
+.links a {
+  line-height: 0;
 }
 </style>

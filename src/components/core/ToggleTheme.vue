@@ -11,7 +11,7 @@ function handleToggle() {
 </script>
 
 <template>
-  <a class="select-none" title="Toggle Color Scheme" @click="handleToggle">
+  <a title="Toggle Color Scheme" @click="handleToggle">
     <SunIcon v-if="isDark" />
     <MoonIcon v-else />
   </a>
