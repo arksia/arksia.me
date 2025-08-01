@@ -43,20 +43,24 @@ import GithubIcon from '~icons/uil/github-alt'
 }
 
 .nav {
-  padding: 1.5rem 2rem;
   display: flex;
+  padding: 1.5rem 2rem;
   align-items: center;
   box-sizing: border-box;
 }
 
 .nav a {
   display: block;
-  cursor: pointer;
-  text-decoration: none;
   color: inherit;
-  transition: opacity 0.2s ease;
+  text-decoration: none;
+  cursor: pointer;
   opacity: 0.6;
+  transition: opacity 0.2s ease;
   outline: none;
+}
+
+.links a {
+  line-height: 0;
 }
 
 .nav a:hover {
@@ -65,21 +69,17 @@ import GithubIcon from '~icons/uil/github-alt'
 }
 
 .routes {
+  display: grid;
   margin-left: 50%;
   transform: translateX(-50%);
-  display: grid;
   gap: 1rem;
   grid-auto-flow: column;
 }
 
 .links {
-  margin-left: auto;
   display: grid;
+  margin-left: auto;
   gap: 1rem;
   grid-auto-flow: column;
-}
-
-.links a {
-  line-height: 0;
 }
 </style>

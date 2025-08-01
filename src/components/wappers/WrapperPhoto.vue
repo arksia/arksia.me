@@ -10,7 +10,7 @@
 
 <style scoped>
 .photo-wrapper {
-  margin: 0 auto;
   padding: 0 1rem;
+  margin: 0 auto;
 }
 </style>

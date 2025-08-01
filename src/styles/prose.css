@@ -5,9 +5,9 @@
 }
 
 .prose {
-  color: var(--fg);
   max-width: var(--prose-max-width);
   margin: 0 auto;
+  color: var(--fg);
   font-size: 1rem;
   line-height: 1.75;
 }
