@@ -1,4 +1,6 @@
+import fs from 'node:fs'
 import Vue from '@vitejs/plugin-vue'
+import matter from 'gray-matter'
 import AutoImport from 'unplugin-auto-import/vite'
 import Icons from 'unplugin-icons/vite'
 import Components from 'unplugin-vue-components/vite'
@@ -12,6 +14,18 @@ export default defineConfig({
   plugins: [
     VueRouter({
       extensions: ['.vue', '.md'],
+      extendRoute(route) {
+        const path = route.components.get('default')
+        if (!path)
+          return
+
+        if (path.includes('posts/') && path.endsWith('.md')) {
+          const { data } = matter(fs.readFileSync(path, 'utf-8'))
+          route.addToMeta({
+            frontmatter: data,
+          })
+        }
+      },
     }),
     Vue({
       include: [/\.vue$/, /\.md$/],
