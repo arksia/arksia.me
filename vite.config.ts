@@ -31,10 +31,12 @@ export default defineConfig({
       include: [/\.vue$/, /\.md$/],
     }),
     Markdown({
-      wrapperComponent: id => id.includes('/photos/')
-        ? 'WrapperPhotos'
+      wrapperComponent: id => id.includes('/photos')
+        ? 'WrapperPhoto'
         : 'WrapperPost',
-      wrapperClasses: 'prose',
+      wrapperClasses: id => id.includes('/photos')
+        ? ''
+        : 'prose',
     }),
     AutoImport({
       imports: [
