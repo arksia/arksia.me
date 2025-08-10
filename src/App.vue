@@ -10,6 +10,6 @@
 
 <style scoped>
 .main {
-  padding: 2.5rem 1.75rem;
+  padding: 2.5rem 1rem;
 }
 </style>

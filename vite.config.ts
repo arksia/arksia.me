@@ -11,6 +11,11 @@ import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig({
+  resolve: {
+    alias: {
+      '~': '/src',
+    },
+  },
   plugins: [
     VueRouter({
       extensions: ['.vue', '.md'],
@@ -31,12 +36,12 @@ export default defineConfig({
       include: [/\.vue$/, /\.md$/],
     }),
     Markdown({
-      wrapperComponent: id => id.includes('/photos')
-        ? 'WrapperPhoto'
-        : 'WrapperPost',
-      wrapperClasses: id => id.includes('/photos')
-        ? ''
-        : 'prose',
+      wrapperComponent: id => id.includes('/posts')
+        ? 'WrapperPost'
+        : null,
+      wrapperClasses: id => id.includes('/posts')
+        ? 'prose'
+        : null,
     }),
     AutoImport({
       imports: [

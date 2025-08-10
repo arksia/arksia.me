@@ -16,14 +16,8 @@ const routes: Post[] = router.getRoutes()
 </script>
 
 <template>
-  <div class="list-posts">
-    <h1>Posts</h1>
-    <div v-for="route in routes" :key="route.path">
-      <h2>{{ route.title }}</h2>
-    </div>
+  <h1>Posts</h1>
+  <div v-for="route in routes" :key="route.path">
+    <h2>{{ route.title }}</h2>
   </div>
 </template>
-
-<style scoped>
-
-</style>
