@@ -24,7 +24,7 @@ export default defineConfig({
         if (!path)
           return
 
-        if (path.includes('posts/') && path.endsWith('.md')) {
+        if (path.endsWith('.md')) {
           const { data } = matter(fs.readFileSync(path, 'utf-8'))
           route.addToMeta({
             frontmatter: data,
@@ -36,12 +36,12 @@ export default defineConfig({
       include: [/\.vue$/, /\.md$/],
     }),
     Markdown({
-      wrapperComponent: id => id.includes('/posts')
-        ? 'WrapperPost'
-        : null,
-      wrapperClasses: id => id.includes('/posts')
-        ? 'prose'
-        : null,
+      wrapperComponent: id => id.includes('/photos')
+        ? null
+        : 'WrapperPost',
+      wrapperClasses: id => id.includes('/photos')
+        ? null
+        : 'prose',
     }),
     AutoImport({
       imports: [
