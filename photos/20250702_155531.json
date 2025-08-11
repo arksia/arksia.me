@@ -1,0 +1,29 @@
+{
+  "ImageWidth": 3995,
+  "ImageHeight": 2652,
+  "Orientation": "Horizontal (normal)",
+  "OffsetTimeDigitized": "+08:00",
+  "ISO": 64,
+  "FocalLengthIn35mmFormat": 75,
+  "SubSecTimeDigitized": "392",
+  "DateTimeOriginal": "2025-07-02T07:55:58.000Z",
+  "SubSecTimeOriginal": "392",
+  "CreateDate": "2025-07-02T07:55:58.000Z",
+  "FocalLength": 10.1,
+  "OffsetTime": "+08:00",
+  "ExposureTime": 0.01,
+  "OffsetTimeOriginal": "+08:00",
+  "Flash": "Flash did not fire",
+  "SubSecTime": "392",
+  "FNumber": 2,
+  "LightSource": "Unknown",
+  "GPSAltitude": 0,
+  "GPSSpeed": 0,
+  "GPSProcessingMethod": "network",
+  "GPSAltitudeRef": {
+    "0": 0
+  },
+  "GPSSpeedRef": "K",
+  "GPSTimeStamp": "7:55:58",
+  "GPSDateStamp": "2025:07:02"
+}

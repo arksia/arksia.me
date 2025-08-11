@@ -9,6 +9,8 @@ import { VueRouterAutoImports } from 'unplugin-vue-router'
 import VueRouter from 'unplugin-vue-router/vite'
 import { defineConfig } from 'vite'
 
+import GenPhotoMeta from './plugins/gen-photo-meta'
+
 // https://vite.dev/config/
 export default defineConfig({
   resolve: {
@@ -17,6 +19,7 @@ export default defineConfig({
     },
   },
   plugins: [
+    GenPhotoMeta('./photos'),
     VueRouter({
       extensions: ['.vue', '.md'],
       extendRoute(route) {
