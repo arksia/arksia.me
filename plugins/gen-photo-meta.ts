@@ -9,7 +9,7 @@ async function generatePhotoMetadata(photosDir: string, filename: string) {
     const photoPath = path.join(photosDir, filename)
     const jsonPath = path.join(photosDir, `${path.parse(filename).name}.json`)
 
-    // 解析EXIF数据
+    // parse EXIF data
     const photoMate = await exifr.parse(photoPath)
 
     if (photoMate) {
@@ -22,7 +22,7 @@ async function generatePhotoMetadata(photosDir: string, filename: string) {
   }
 }
 
-// 生成所有图片的元数据
+// generate all photos metadata
 async function generateAllMetadata(photosDir: string) {
   try {
     if (!fs.existsSync(photosDir)) {
@@ -38,7 +38,7 @@ async function generateAllMetadata(photosDir: string) {
       })
 
     if (photos.length > 0) {
-      console.warn(`📸 Found ${photos.length} new photos in ${photosDir}`)
+      console.warn(`🖼️ Found ${photos.length} new photos in ${photosDir}`)
 
       for (const photo of photos) {
         await generatePhotoMetadata(photosDir, photo)

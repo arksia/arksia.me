@@ -12,83 +12,65 @@ document.body.removeChild(tempElement)
 
 const masonryRef = ref<HTMLElement>()
 
-const columnCount = ref(4)
-const allColumns = ref<string[][]>([[], [], [], []])
-const allColumnHeights = ref([0, 0, 0, 0])
-
-const activeColumns = computed(() => allColumns.value.slice(0, columnCount.value))
-const activeColumnHeights = computed(() => allColumnHeights.value.slice(0, columnCount.value))
+const columns = ref<string[][]>([[], [], [], []])
+const columnHeights = ref([0, 0, 0, 0])
 
 const currentPhotoIndex = ref(0)
-
-const isLoading = ref(false)
 
 // calculate columns
 function calculateColumns() {
   const width = window.innerWidth
+  let newColumnCount
+
   if (width < 480) {
-    columnCount.value = 1
+    newColumnCount = 1
   }
   else if (width < 768) {
-    columnCount.value = 2
+    newColumnCount = 2
   }
   else if (width < 1024) {
-    columnCount.value = 3
+    newColumnCount = 3
   }
   else {
-    columnCount.value = 4
+    newColumnCount = 4
+  }
+  if (columns.value.length !== newColumnCount) {
+    columns.value = Array.from({ length: newColumnCount }, () => [])
+    columnHeights.value = Array.from({ length: newColumnCount }, () => 0)
+    currentPhotoIndex.value = 0
   }
 }
 
 // relayout masonry
-async function relayout() {
-  if (isLoading.value) {
-    return
-  }
+function relayout() {
   if (currentPhotoIndex.value >= photos.length) {
     return
   }
   if (!masonryRef.value) {
     return
   }
-  if (Math.min(...activeColumnHeights.value) > window.innerHeight - 72 + window.scrollY) {
+  const scrollHeight = window.innerHeight - 72 + window.scrollY
+  if (Math.min(...columnHeights.value) > scrollHeight) {
     return
   }
 
-  isLoading.value = true
+  const columnCount = columns.value.length
+  const columnWidth = (masonryRef.value.offsetWidth - (columnCount - 1) * remValue) / columnCount
 
-  const columnWidth = (masonryRef.value.offsetWidth - (columnCount.value - 1) * remValue) / columnCount.value
-  const preloads: Promise<{ width: number, height: number }>[] = []
-
-  photos.slice(currentPhotoIndex.value, currentPhotoIndex.value + columnCount.value * 2).forEach((photo) => {
-    const img = new Promise<{ width: number, height: number }>((resolve, reject) => {
-      const img = new Image()
-      img.onload = () => {
-        resolve({
-          width: img.naturalWidth,
-          height: img.naturalHeight,
-        })
-      }
-      img.onerror = reject
-      img.src = photo.url
-    })
-
-    img.then(({ width, height }) => {
-      const columnIndex = activeColumnHeights.value.indexOf(Math.min(...activeColumnHeights.value))
-      allColumns.value[columnIndex].push(photo.url)
-      const actualHeight = columnWidth * (height / width)
-      allColumnHeights.value[columnIndex] += actualHeight + remValue
-    }).catch(() => {
-      console.error('Failed to load image:', photo.url)
-    })
-
-    preloads.push(img)
+  while (currentPhotoIndex.value < photos.length && Math.min(...columnHeights.value) < scrollHeight) {
+    const photo = photos[currentPhotoIndex.value]
+    const { ImageWidth, ImageHeight } = photo
+    if (!ImageWidth || !ImageHeight) {
+      currentPhotoIndex.value++
+      console.warn(`🖼️ ${photo.name} not have ImageWidth or ImageHeight`)
+      continue
+    }
+    const columnIndex = columnHeights.value.indexOf(Math.min(...columnHeights.value))
+    columns.value[columnIndex].push(photo.url)
+    const actualHeight = columnWidth * (ImageHeight / ImageWidth)
+    columnHeights.value[columnIndex] += actualHeight + remValue
     currentPhotoIndex.value++
-  })
-
-  await Promise.allSettled(preloads)
-
-  isLoading.value = false
+  }
 
   nextTick(() => {
     relayout()
@@ -97,9 +79,7 @@ async function relayout() {
 
 onMounted(() => {
   calculateColumns()
-  nextTick(() => {
-    relayout()
-  })
+  relayout()
   window.addEventListener('resize', throttle(calculateColumns, 100))
   window.addEventListener('scroll', throttle(relayout, 100))
 })
@@ -112,7 +92,7 @@ onUnmounted(() => {
 
 <template>
   <div ref="masonryRef" class="masonry-container">
-    <div v-for="column in activeColumns" :key="column[0]" class="masonry-column">
+    <div v-for="column in columns" :key="column[0]" class="masonry-column">
       <img v-for="photo in column" :key="photo" :src="photo" class="photo-image">
     </div>
   </div>
