@@ -38,6 +38,7 @@ function calculateColumns() {
     columns.value = Array.from({ length: newColumnCount }, () => [])
     columnHeights.value = Array.from({ length: newColumnCount }, () => 0)
     currentPhotoIndex.value = 0
+    relayout()
   }
 }
 
