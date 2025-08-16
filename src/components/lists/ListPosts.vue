@@ -8,6 +8,7 @@ const routes: Post[] = router.getRoutes()
     path: i.meta.frontmatter.redirect || i.path,
     title: i.meta.frontmatter.title,
     catalog: i.meta.frontmatter.catalog,
+    desc: i.meta.frontmatter.desc,
     date: i.meta.frontmatter.date,
     lang: i.meta.frontmatter.lang,
     duration: i.meta.frontmatter.duration,
@@ -20,12 +21,9 @@ const posts = computed(() =>
 </script>
 
 <template>
-  <RouterLink
-    v-for="post in posts" :key="post.path"
-    class="post-item"
-    :to="post.path"
-  >
+  <RouterLink v-for="post in posts" :key="post.path" class="post-item" :to="post.path">
     <div>
+      <span class="post-item-desc">{{ post.desc }}</span>
       <span>{{ post.title }}</span>
       <span class="post-item-date">{{ post.date }}</span>
     </div>
@@ -37,6 +35,7 @@ const posts = computed(() =>
 
 <style scoped>
 .post-item {
+  position: relative;
   display: flex;
   padding: 0.75rem 0;
   color: inherit;
@@ -53,6 +52,20 @@ const posts = computed(() =>
 
 .post-item:hover {
   opacity: 1;
+}
+
+.post-item-desc {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+  transform: translateY(1.25rem);
+  transition: 0.5s ease;
+  filter: blur(1px);
+  pointer-events: none;
+}
+
+.post-item:hover .post-item-desc {
+  opacity: 0.6;
 }
 
 .post-item-date {
