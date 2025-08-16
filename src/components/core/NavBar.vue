@@ -13,10 +13,18 @@ import GithubIcon from '~icons/uil/github-alt'
   <header class="header">
     <nav class="nav">
       <div class="routes">
-        <RouterLink to="/posts" title="Post">
+        <RouterLink
+          to="/posts"
+          title="Post"
+          :style="$router.currentRoute.value.path === '/posts' ? { opacity: 1 } : null"
+        >
           <span>Posts</span>
         </RouterLink>
-        <RouterLink to="/photos" title="Photos">
+        <RouterLink
+          to="/photos"
+          title="Photos"
+          :style="$router.currentRoute.value.path === '/photos' ? { opacity: 1 } : null"
+        >
           <span>Photos</span>
         </RouterLink>
       </div>

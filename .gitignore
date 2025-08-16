@@ -25,4 +25,5 @@ dist-ssr
 
 # Auto import
 auto-imports.d.ts
+typed-router.d.ts
 components.d.ts
