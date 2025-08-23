@@ -6,7 +6,7 @@ catalog: btb
 desc: </ 基础不牢，地动山摇>
 ---
 
-# 回归基本功 JS数据类型
+# 回归基本功 JavaScript 数据类型
 
 今天是从学校搬离的整一个月，在憧憬了很久的独居小屋里写下这篇我真正意义上的第一博客。一年前的这时候我刚刚写完论文，但我知道 ... 概率不大，其实渐渐的也不难发现写文章对于我来说是一件很困扰的事。老实说，表达这一块我是有很大问题的，创新不难但要把故事讲好就不容易了，这也导致我对于读博的想法愈发消极。当时身边的同学工作或升学都在如火如荼的进行，而我就像凝滞了一样，今天想读博就搞搞研究，明天想工作就背背八股，一月一月的过去一事无成，真是至暗时刻。好在现在还是有出路了。
 
@@ -18,6 +18,4 @@ desc: </ 基础不牢，地动山摇>
 
 ECMAScript 基准下有 7 种简单数据类型 (Undefined, Null, String, Number, BigInt, Boolean, Symbol) 和 1 种复杂数据类型 Object。该基准不允许自定义类型，但换而言之所有的数据都可以用这 8 种类型表示。
 
-由于 ECMAScript 的类型系统是松散的，所以在确定数据类型时可使用 <code>typeof</code> **操作符** 返回 8 种类型对应的字符串。说来惭愧，这是我遇到的一道面试题——如何判断一个变量是否是 <code>Promise</code> 对象? 当时我将 <code>typeof</code> 与 <code>instanceof</code> 混为了一谈...
-
-<code>instanceof</code> 主要用于判断变量是否是属于某个 Object 的实例，返回值是 Boolean 类型，补充了 <code>typeof</code> 无法判断 Object 具体类型的功能。
+由于 ECMAScript 的类型系统是松散的，所以在确定数据类型时可使用 <code>typeof</code> **操作符** 返回 8 种类型对应的字符串。与之类似的还有 <code>instanceof</code> 主要用于判断变量是否是属于某个 Object 的实例，返回值是 Boolean 类型，补充了 <code>typeof</code> 无法判断 Object 具体类型的功能。
