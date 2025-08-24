@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import GithubIcon from '~icons/uil/github-alt'
+import WaterSurface from './WaterSurface/index.vue'
 
 // function toTop() {
 //   window.scrollTo({
@@ -12,6 +13,7 @@ import GithubIcon from '~icons/uil/github-alt'
 <template>
   <header class="header">
     <nav class="nav">
+      <WaterSurface />
       <div class="routes">
         <RouterLink
           to="/posts"
@@ -52,7 +54,7 @@ import GithubIcon from '~icons/uil/github-alt'
 
 .nav {
   display: flex;
-  padding: 1.5rem 2rem;
+  padding: 1.75rem 2rem;
   align-items: center;
   box-sizing: border-box;
 }

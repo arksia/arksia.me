@@ -13,12 +13,14 @@
   "dependencies": {
     "@vueuse/core": "^13.5.0",
     "gray-matter": "^4.0.3",
+    "three": "^0.179.1",
     "vue": "^3.5.17"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^5.0.0",
     "@iconify/json": "^2.2.363",
     "@types/node": "^24.1.0",
+    "@types/three": "^0.179.0",
     "@unhead/vue": "^2.0.12",
     "@vitejs/plugin-vue": "^6.0.0",
     "@vue/tsconfig": "^0.7.0",

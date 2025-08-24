@@ -16,6 +16,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     ToggleTheme: typeof import('./src/components/core/ToggleTheme.vue')['default']
     WapperPost: typeof import('./src/components/WapperPost.vue')['default']
+    WaterSurface: typeof import('./src/components/core/WaterSurface/index.vue')['default']
     WrapperPhoto: typeof import('./src/components/wappers/WrapperPhoto.vue')['default']
     WrapperPost: typeof import('./src/components/wappers/WrapperPost.vue')['default']
   }
