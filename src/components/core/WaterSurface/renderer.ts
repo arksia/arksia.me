@@ -38,6 +38,9 @@ class Renderer {
   private waterShader!: THREE.ShaderMaterial
   private water!: Water
 
+  // 固定相机位置
+  private readonly FIXED_EYE_POSITION = new THREE.Vector3(0, 15, 30)
+
   constructor(scene: THREE.Scene, camera: THREE.PerspectiveCamera, renderer: THREE.WebGLRenderer) {
     this.scene = scene
     this.camera = camera
@@ -47,10 +50,17 @@ class Renderer {
     this.lightDir = new THREE.Vector3(2.0, 2.0, -1.0).normalize()
 
     // 创建水面网格 - 增大尺寸
-    const geometry = new THREE.PlaneGeometry(80, 40, 200, 200)
+    const geometry = new THREE.PlaneGeometry(100, 50, 200, 200)
     this.waterMesh = new THREE.Mesh(geometry)
-    this.waterMesh.position.y = 0 // 确保水面在 y=0 位置
-    this.waterMesh.rotation.x = -Math.PI / 2 // 旋转水面使其水平
+
+    // 固定水面位置，防止移动
+    this.waterMesh.position.set(0, 0, 0)
+    this.waterMesh.rotation.set(-Math.PI / 2, 0, 0)
+    this.waterMesh.scale.set(1, 1, 1)
+
+    // 确保水面网格不会意外变换
+    this.waterMesh.matrixAutoUpdate = false
+    this.waterMesh.updateMatrix()
 
     // 将水面网格添加到场景中
     this.scene.add(this.waterMesh)
@@ -70,8 +80,9 @@ class Renderer {
         vec4 info = texture2D(water, coord);
         worldPosition = position;
         
-        // 确保水面高度变化可见
-        worldPosition.y += info.r * 2.0; // 放大高度变化
+        // 限制高度变化范围，防止过度变形
+        float heightChange = clamp(info.r, -1.0, 1.0);
+        worldPosition.y += heightChange * 1.0; // 减小高度变化幅度
 
         gl_Position = projectionMatrix * modelViewMatrix * vec4(worldPosition, 1.0);
       }
@@ -110,15 +121,25 @@ class Renderer {
         // 让水稍微不透明一点
         float baseAlpha = max(0.4, lightIntensity * 0.4 + fresnel * 0.5);
         
-        // 添加边缘渐变效果
+        // 修复边缘渐变问题 - 确保完全覆盖UV边界
         vec2 center = vec2(0.5, 0.5);
         vec2 pixelCoord = coord;
-        float distanceFromCenter = length(pixelCoord - center);
-        float maxDistance = 0.6; // 控制渐变范围，0.6表示从60%位置开始渐变
-        float edgeFade = 1.0 - smoothstep(0.0, maxDistance, distanceFromCenter);
         
-        // 应用边缘渐变到透明度
+        // 使用椭圆距离函数，确保椭圆形渐变
+        vec2 normalizedCoord = (pixelCoord - center) * 2.0; // 将UV坐标扩展到[-1,1]范围
+        float distanceFromCenter = length(normalizedCoord);
+        
+        // 从中心开始渐变，确保边缘完全透明
+        float maxDistance = 1.0; // 从100%位置开始渐变，覆盖整个UV范围
+        float edgeFade = 1.0 - smoothstep(0.5, maxDistance, distanceFromCenter);
+        
+        // 应用边缘渐变到透明度，确保边缘完全透明
         float finalAlpha = baseAlpha * edgeFade;
+        
+        // 如果透明度太低，直接丢弃像素，避免白色轮廓
+        if (finalAlpha < 0.01) {
+          discard;
+        }
         
         gl_FragColor = vec4(color, finalAlpha);
       }
@@ -130,7 +151,7 @@ class Renderer {
       uniforms: {
         water: { value: null },
         light: { value: this.lightDir },
-        eye: { value: this.camera.position },
+        eye: { value: this.FIXED_EYE_POSITION }, // 使用固定相机位置
       },
       transparent: true,
       side: THREE.DoubleSide,
@@ -144,8 +165,13 @@ class Renderer {
   }
 
   renderWater(water: Water) {
-    // 更新相机位置
-    this.waterShader.uniforms.eye.value = this.camera.position
+    // 确保水面网格位置和变换保持稳定
+    this.waterMesh.position.set(0, 0, 0)
+    this.waterMesh.rotation.set(-Math.PI / 2, 0, 0)
+    this.waterMesh.scale.set(1, 1, 1)
+
+    // 强制更新矩阵
+    this.waterMesh.updateMatrix()
 
     // 更新水面纹理
     if (water && water.textureA) {
@@ -161,9 +187,6 @@ class Renderer {
 
   // 更新水面纹理（不渲染，只更新纹理）
   updateWaterTexture(water: Water) {
-    // 更新相机位置
-    this.waterShader.uniforms.eye.value = this.camera.position
-
     // 更新水面纹理
     if (water && water.textureA) {
       this.waterShader.uniforms.water.value = water.textureA
@@ -181,6 +204,19 @@ class Renderer {
   // 设置水面数据（用于从外部更新水面模拟数据）
   setWater(water: Water) {
     this.water = water
+  }
+
+  // 获取固定相机位置（可选，用于调试）
+  getFixedEyePosition(): THREE.Vector3 {
+    return this.FIXED_EYE_POSITION.clone()
+  }
+
+  // 重置水面网格位置（用于修复位置偏移）
+  resetWaterPosition() {
+    this.waterMesh.position.set(0, 0, 0)
+    this.waterMesh.rotation.set(-Math.PI / 2, 0, 0)
+    this.waterMesh.scale.set(1, 1, 1)
+    this.waterMesh.updateMatrix()
   }
 }
 
