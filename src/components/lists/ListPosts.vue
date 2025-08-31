@@ -38,12 +38,13 @@ const posts = computed(() =>
   position: relative;
   display: flex;
   padding: 0.75rem 0;
-  color: inherit;
+  color: var(--fg-deeper);
   font-size: 1.125rem;
   text-decoration: none;
   cursor: pointer;
   opacity: 0.6;
   transition: 0.2s ease;
+  border-bottom: none !important;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;

@@ -16,14 +16,14 @@ import GithubIcon from '~icons/uil/github-alt'
         <RouterLink
           to="/posts"
           title="Post"
-          :style="$router.currentRoute.value.path === '/posts' ? { opacity: 1 } : null"
+          :style="$router.currentRoute.value.path.includes('/posts') ? { opacity: 1 } : null"
         >
           <span>Posts</span>
         </RouterLink>
         <RouterLink
           to="/photos"
           title="Photos"
-          :style="$router.currentRoute.value.path === '/photos' ? { opacity: 1 } : null"
+          :style="$router.currentRoute.value.path.includes('/photos') ? { opacity: 1 } : null"
         >
           <span>Photos</span>
         </RouterLink>
