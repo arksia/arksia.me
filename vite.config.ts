@@ -1,4 +1,5 @@
 import fs from 'node:fs'
+import MarkdownItShiki from '@shikijs/markdown-it'
 import Vue from '@vitejs/plugin-vue'
 import matter from 'gray-matter'
 import AutoImport from 'unplugin-auto-import/vite'
@@ -45,6 +46,16 @@ export default defineConfig({
       wrapperClasses: id => id.includes('/photos')
         ? null
         : 'prose',
+      async markdownItSetup(md) {
+        md.use(await MarkdownItShiki({
+          themes: {
+            dark: 'slack-dark',
+            light: 'slack-dark',
+          },
+          defaultColor: false,
+          cssVariablePrefix: '--s-',
+        }))
+      },
     }),
     AutoImport({
       imports: [
