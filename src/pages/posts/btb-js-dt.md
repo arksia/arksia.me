@@ -42,7 +42,7 @@ console.log(typeof foo === 'undefined') // true
 规范不建议使用 <code>undefined</code> 作为变量名，但是为了保险起见，推荐用后两种方式作为 <code>undefined</code> 判别手段。
 
 ### Boolean
-<code>boolean</code> 是最常使用的类型，该类型只有两个字面量 <code>true</code> 和 <code>false</code>。一般来说，需要注意的点在于条件判断语句对于 <code>boolean</code> 的自动转换，规则如下：
+<code>boolean</code> 是最常使用的类型，该类型只有两个字面量 <code>true</code> 和 <code>false</code>。需要注意的点在于条件判断语句对于 <code>boolean</code> 的自动转换，规则如下：
 ```ts
 /** !! converts other types to boolean */
 console.log(!!'ark') // true (Non-empty string)
@@ -69,7 +69,7 @@ let hexNum = 0x10 // 16
 浮点数的数值中包含小数点，且小数点后至少有一个数字，精度为 17 位小数。浮点数可以配合科学计数法表示非常大或非常小的数。由于使用 **IEEE 745** 标准实现，所以浮点数计算可能出现微小的偏差，一个舍入错误导致的经典 bug 就是 <code>0.1 + 0.2 === 0.3 // false</code>。
 
 #### 值域
-number 的最大最小值存在 <code>Number.MAX_VALUE</code> 和 <code>Number.MIN_VALUE</code>。超出值域的数被表示为 <code>Number.POSITIVE_INFINITY</code> 或 <code>Number.NEGATIVE_INFINITY</code>，虽无实际的值表示，但可以通过  <code>isFinite()</code> 做判别。
+<code>number</code> 的最大最小值存在 <code>Number.MAX_VALUE</code> 和 <code>Number.MIN_VALUE</code>。超出值域的数被表示为 <code>Number.POSITIVE_INFINITY</code> 或 <code>Number.NEGATIVE_INFINITY</code>，虽无实际的值表示，但可以通过  <code>isFinite()</code> 做判别。
 
 ```ts
 console.log(isFinite(Number.POSITIVE_INFINITY)) // false
