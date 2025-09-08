@@ -42,7 +42,7 @@ console.log(typeof foo === 'undefined') // true
 规范不建议使用 <code>undefined</code> 作为变量名，但是为了保险起见，推荐用后两种方式作为 <code>undefined</code> 判别手段。
 
 ### Boolean
-<code>boolean</code> 是最常使用的类型，该类型只有两个字面量 <code>true</code> 和 <code>false</code>。一般来说，需要注意的点在于条件判断语句对于 <code>boolean</code> 的自动转换，规则如下：
+<code>boolean</code> 是非常高频使用的类型，该类型只有两个字面量 <code>true</code> 和 <code>false</code>。需要注意的点在于条件判断语句对于 <code>boolean</code> 的自动转换，规则如下：
 ```ts
 /** !! converts other types to boolean */
 console.log(!!'ark') // true (Non-empty string)
@@ -69,7 +69,7 @@ let hexNum = 0x10 // 16
 浮点数的数值中包含小数点，且小数点后至少有一个数字，精度为 17 位小数。浮点数可以配合科学计数法表示非常大或非常小的数。由于使用 **IEEE 745** 标准实现，所以浮点数计算可能出现微小的偏差，一个舍入错误导致的经典 bug 就是 <code>0.1 + 0.2 === 0.3 // false</code>。
 
 #### 值域
-number 的最大最小值存在 <code>Number.MAX_VALUE</code> 和 <code>Number.MIN_VALUE</code>。超出值域的数被表示为 <code>Number.POSITIVE_INFINITY</code> 或 <code>Number.NEGATIVE_INFINITY</code>，虽无实际的值表示，但可以通过  <code>isFinite()</code> 做判别。
+<code>number</code> 的最大最小值存在 <code>Number.MAX_VALUE</code> 和 <code>Number.MIN_VALUE</code>。超出值域的数被表示为 <code>Number.POSITIVE_INFINITY</code> 或 <code>Number.NEGATIVE_INFINITY</code>，虽无实际的值表示，但可以通过  <code>isFinite()</code> 做判别。
 
 ```ts
 console.log(isFinite(Number.POSITIVE_INFINITY)) // false
@@ -77,3 +77,33 @@ console.log(isFinite(Number.POSITIVE_INFINITY)) // false
 
 #### NaN
 Not a Number，可以通过 <code>isNaN()</code> 判别。<code>NaN</code> 是一个特殊的数值，作为本该返回数值的操作失败时的返回值，比较有意思的是该值不等于自身，且任何涉及 <code>NaN</code> 的操作都返回 <code>NaN</code>。
+
+### BigInt
+<code>bigint</code> 用于处理超过 <code>Number.MAX_SAFE_INTRGER</code> 的大整数，超过这个数值进行整数运算可能会出现精度问题。
+```ts
+console.log(Number.MAX_SAFE_INTRGER) // 9007199254740991
+console.log(9007199254740992 === 9007199254740993) // true
+```
+前文提到的 <code>Number.MAX_VALUE</code> 是浮点数的最大值，与 <code>Number.MAX_SAFE_INTRGER</code> 并不相同。
+<code>bigint</code> 不再使用 **IEEE 754**，而是使用的一组能够放入 CPU 寄存器的较小的值表示。可以用整数字面量后加 **n**，或者使用 <code>BigInt()</code> 创建该类型。
+```ts
+let a = 1n
+let b = Bigint(1)
+```
+<code>BigInt</code> 与 <code>Number</code> 不能混合计算，不能使用 <code>Math</code> 下属的方法，但支持除了无符号右移 <code>>>></code> 和一元 <code>+</code> 操作符以外的 <code>Number</code> 运算符。
+
+### String
+<code>string</code> 也是非常高频使用的类型之一，一般形式为双引号或单引号中包裹的内容。
+```ts
+let name = 'ark'
+let password = "123456789"
+```
+字符串的包装类型属于类数组对象，所以很多属性和方法和数组对象是通用的。其字面量的长度通过 <code>length</code> 属性获取，也可以通过下标取到单个字符等等。但与数组的本质区别在于字符串作为基础类型且是**不可变的字符序列**。
+```ts
+console.log(name.length) // 3
+console.log(password[8]) // '9'
+
+let str = 'hello'
+str[0] = "H" // invalid
+console.log(str) // 'hello'
+```
