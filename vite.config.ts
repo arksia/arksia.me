@@ -1,4 +1,5 @@
 import fs from 'node:fs'
+import { transformerColorizedBrackets } from '@shikijs/colorized-brackets'
 import MarkdownItShiki from '@shikijs/markdown-it'
 import Vue from '@vitejs/plugin-vue'
 import matter from 'gray-matter'
@@ -50,10 +51,11 @@ export default defineConfig({
         md.use(await MarkdownItShiki({
           themes: {
             dark: 'slack-dark',
-            light: 'slack-dark',
+            light: 'slack-ochin',
           },
           defaultColor: false,
           cssVariablePrefix: '--s-',
+          transformers: [transformerColorizedBrackets()],
         }))
       },
     }),
