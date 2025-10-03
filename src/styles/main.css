@@ -1,6 +1,7 @@
 :root {
   --c-fg: #000;
   --c-bg: #fff;
+  --c-primary: #a160fc;
   --c-scrollbar: #eee;
   --c-scrollbar-hover: #bbb;
 }
@@ -29,4 +30,8 @@ body {
   margin: 0;
   font-family: Inter, sans-serif;
   box-sizing: border-box;
+}
+
+#nprogress .bar {
+  background: var(--c-primary) !important;
 }
