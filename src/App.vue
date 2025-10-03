@@ -4,8 +4,8 @@
 <template>
   <NavBar />
   <main class="main">
-    <Transition name="fade">
-      <RouterView />
+    <Transition name="fade" mode="out-in" appear>
+      <RouterView :key="$route.fullPath" />
     </Transition>
   </main>
 </template>
@@ -20,13 +20,10 @@
 }
 
 .fade-leave-active {
-  transition: opacity 0.4s ease-out;
+  transition: opacity 0.2s ease-out;
 }
 
-.fade-enter-from {
-  opacity: 0;
-}
-
+.fade-enter-from,
 .fade-leave-to {
   opacity: 0;
 }
