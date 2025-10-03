@@ -2,8 +2,13 @@
   --c-fg: #000;
   --c-bg: #fff;
   --c-primary: #a160fc;
-  --c-scrollbar: #eee;
-  --c-scrollbar-hover: #bbb;
+  --c-scrollbar: #ddd;
+  --c-scrollbar-hover: #ccc;
+}
+
+* {
+  scrollbar-color: var(--c-scrollbar) var(--c-bg);
+  scrollbar-width: thin;
 }
 
 /* theme transitioning */
@@ -21,7 +26,7 @@ html {
 html.dark {
   --c-fg: #fff;
   --c-bg: #000;
-  --c-scrollbar: #111;
+  --c-scrollbar: #333;
   --c-scrollbar-hover: #222;
 }
 
