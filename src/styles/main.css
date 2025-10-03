@@ -5,6 +5,11 @@
   --c-scrollbar-hover: #bbb;
 }
 
+/* theme transitioning */
+.theme-transitioning * {
+  transition: all 0.3s ease !important;
+}
+
 html {
   background-color: var(--c-bg);
   color: var(--c-fg);

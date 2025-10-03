@@ -6,7 +6,11 @@ const isDark = useDark()
 const toggleDark = useToggle(isDark)
 
 function handleToggle() {
+  document.documentElement.classList.add('theme-transitioning')
   toggleDark()
+  setTimeout(() => {
+    document.documentElement.classList.remove('theme-transitioning')
+  }, 300)
 }
 </script>
 
