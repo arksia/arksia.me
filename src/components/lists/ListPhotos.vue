@@ -17,6 +17,16 @@ const columnHeights = ref([0, 0, 0, 0])
 
 const currentPhotoIndex = ref(0)
 
+const isFullscreen = ref(false)
+const isFullscreenReady = ref(false)
+const fullscreenImage = ref('')
+const originalImageTop = ref(0)
+const originalImageLeft = ref(0)
+const originalImageWidth = ref(0)
+const originalImageHeight = ref(0)
+const fullscreenImageWidth = ref(0)
+const fullscreenImageHeight = ref(0)
+
 // calculate columns
 function calculateColumns() {
   const width = window.innerWidth
@@ -89,14 +99,86 @@ onUnmounted(() => {
   window.removeEventListener('resize', calculateColumns)
   window.removeEventListener('scroll', relayout)
 })
+
+function openFullscreen(event: MouseEvent, photo: string) {
+  fullscreenImage.value = photo
+  isFullscreen.value = true
+  requestAnimationFrame(() => {
+    isFullscreenReady.value = true
+  })
+  document.body.style.overflow = 'hidden'
+
+  const target = event.target as HTMLImageElement
+  const rect = target.getBoundingClientRect()
+  originalImageTop.value = rect.top
+  originalImageLeft.value = rect.left
+  originalImageWidth.value = rect.width
+  originalImageHeight.value = rect.height
+  const aspectRatioOfImage = originalImageWidth.value / originalImageHeight.value
+  const maxWidth = window.innerWidth * 0.9
+  const maxHeight = window.innerHeight * 0.9
+  const aspectRatioOfWindow = maxWidth / maxHeight
+  if (aspectRatioOfImage > aspectRatioOfWindow) {
+    fullscreenImageWidth.value = maxWidth
+    fullscreenImageHeight.value = maxWidth / aspectRatioOfImage
+  }
+  else {
+    fullscreenImageWidth.value = maxHeight * aspectRatioOfImage
+    fullscreenImageHeight.value = maxHeight
+  }
+}
+
+function closeFullscreen() {
+  isFullscreen.value = false
+  fullscreenImage.value = ''
+  isFullscreenReady.value = false
+  document.body.style.overflow = ''
+  originalImageTop.value = 0
+  originalImageLeft.value = 0
+  originalImageWidth.value = 0
+  originalImageHeight.value = 0
+  fullscreenImageWidth.value = 0
+  fullscreenImageHeight.value = 0
+}
 </script>
 
 <template>
   <div ref="masonryRef" class="masonry-container">
     <div v-for="column in columns" :key="column[0]" class="masonry-column">
-      <img v-for="photo in column" :key="photo" :src="photo" class="photo-image">
+      <template v-for="photo in column" :key="photo">
+        <img
+          v-if="!(fullscreenImage === photo && isFullscreenReady)"
+          :src="photo"
+          class="photo-image"
+          @click="openFullscreen($event, photo)"
+        >
+        <div v-else :style="{ width: `${originalImageWidth}px`, height: `${originalImageHeight}px` }" />
+      </template>
     </div>
   </div>
+
+  <Teleport to="body">
+    <Transition name="fullscreen" mode="out-in" appear>
+      <div v-if="isFullscreen" @click="closeFullscreen">
+        <div class="fullscreen-backdrop" />
+        <img
+          :src="fullscreenImage"
+          :class="isFullscreenReady ? 'fullscreen-image done' : 'fullscreen-image'"
+          :style="isFullscreenReady
+            ? {
+              width: `${fullscreenImageWidth}px`,
+              height: `${fullscreenImageHeight}px`,
+            }
+            : {
+              top: `${originalImageTop}px`,
+              left: `${originalImageLeft}px`,
+              width: `${originalImageWidth}px`,
+              height: `${originalImageHeight}px`,
+            }"
+        >
+      </div>
+    </Transition>
+  </Teleport>
 </template>
 
 <style scoped>
@@ -120,7 +202,6 @@ onUnmounted(() => {
   width: 100%;
   height: auto;
   animation: slide-in-up 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  will-change: opacity, transform;
 }
 
 @keyframes slide-in-up {
@@ -132,6 +213,53 @@ onUnmounted(() => {
   100% {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+.fullscreen-image {
+  position: fixed;
+  z-index: 10000;
+  transition: all 0.5s;
+  will-change: transform, top, left;
+}
+
+.fullscreen-image.done {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.fullscreen-leave-active {
+  transition: all 0.3s ease-out;
+}
+
+.fullscreen-leave-to {
+  opacity: 0;
+}
+
+.fullscreen-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 9999;
+  animation: backdropFadeIn 0.3s ease-out;
+}
+
+@keyframes backdropFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
   }
 }
 </style>
