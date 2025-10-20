@@ -2,7 +2,7 @@
 import type { Post } from '~/types'
 
 const router = useRouter()
-const routes: Post[] = router.getRoutes()
+const posts: Post[] = router.getRoutes()
   .filter(i => i.path.startsWith('/posts/') && !i.meta.frontmatter.hidden)
   .map(i => ({
     path: i.meta.frontmatter.redirect || i.path,
@@ -14,10 +14,7 @@ const routes: Post[] = router.getRoutes()
     duration: i.meta.frontmatter.duration,
     place: i.meta.frontmatter.place,
   }))
-
-const posts = computed(() =>
-  [...routes],
-)
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 </script>
 
 <template>

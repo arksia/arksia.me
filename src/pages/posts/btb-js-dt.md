@@ -2,7 +2,7 @@
 title: <回归基本功 class="js">数据类型
 date: 08/16/25
 duration: 8 min
-catalog: btb
+catalog: back-to-basics
 desc: </ 基础不牢，地动山摇>
 ---
 
