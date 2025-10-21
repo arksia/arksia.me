@@ -8,16 +8,12 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    ArkBanner: typeof import('./src/components/core/ArkBanner.vue')['default']
     ListPhotos: typeof import('./src/components/lists/ListPhotos.vue')['default']
     ListPosts: typeof import('./src/components/lists/ListPosts.vue')['default']
     NavBar: typeof import('./src/components/core/NavBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ToggleTheme: typeof import('./src/components/core/ToggleTheme.vue')['default']
-    WapperPost: typeof import('./src/components/WapperPost.vue')['default']
-    WaterSurface: typeof import('./src/components/core/WaterSurface/index.vue')['default']
-    WrapperPhoto: typeof import('./src/components/wappers/WrapperPhoto.vue')['default']
     WrapperPost: typeof import('./src/components/wappers/WrapperPost.vue')['default']
   }
 }

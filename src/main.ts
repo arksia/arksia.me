@@ -10,11 +10,13 @@ export const createApp = ViteSSG(
   App,
   { routes },
   ({ router }) => {
-    router.beforeEach(() => {
-      NProgress.start()
-    })
-    router.afterEach(() => {
-      NProgress.done()
-    })
+    if (!import.meta.env.SSR) {
+      router.beforeEach(() => {
+        NProgress.start()
+      })
+      router.afterEach(() => {
+        NProgress.done()
+      })
+    }
   },
 )
