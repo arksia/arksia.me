@@ -20,12 +20,25 @@ const currentPhotoIndex = ref(0)
 const isFullscreen = ref(false)
 const isFullscreenReady = ref(false)
 const fullscreenImage = ref('')
-const originalImageTop = ref(0)
-const originalImageLeft = ref(0)
-const originalImageWidth = ref(0)
-const originalImageHeight = ref(0)
-const fullscreenImageWidth = ref(0)
-const fullscreenImageHeight = ref(0)
+const isClosing = ref(false)
+
+// Transform state
+const transform = ref({
+  x: 0,
+  y: 0,
+  scale: 1,
+})
+
+// Image dimensions
+const imageSize = ref({
+  width: 0,
+  height: 0,
+})
+
+const fullscreenSize = ref({
+  width: 0,
+  height: 0,
+})
 
 // calculate columns
 function calculateColumns() {
@@ -101,44 +114,85 @@ onUnmounted(() => {
 })
 
 function openFullscreen(event: MouseEvent, photo: string) {
-  fullscreenImage.value = photo
-  isFullscreen.value = true
-  requestAnimationFrame(() => {
-    isFullscreenReady.value = true
-  })
-  document.body.style.overflow = 'hidden'
-
   const target = event.target as HTMLImageElement
   const rect = target.getBoundingClientRect()
-  originalImageTop.value = rect.top
-  originalImageLeft.value = rect.left
-  originalImageWidth.value = rect.width
-  originalImageHeight.value = rect.height
-  const aspectRatioOfImage = originalImageWidth.value / originalImageHeight.value
+
+  // Record original image size
+  imageSize.value = {
+    width: rect.width,
+    height: rect.height,
+  }
+
+  // Calculate fullscreen size
+  const aspectRatio = imageSize.value.width / imageSize.value.height
   const maxWidth = window.innerWidth * 0.9
   const maxHeight = window.innerHeight * 0.9
-  const aspectRatioOfWindow = maxWidth / maxHeight
-  if (aspectRatioOfImage > aspectRatioOfWindow) {
-    fullscreenImageWidth.value = maxWidth
-    fullscreenImageHeight.value = maxWidth / aspectRatioOfImage
+  const windowAspectRatio = maxWidth / maxHeight
+
+  if (aspectRatio > windowAspectRatio) {
+    fullscreenSize.value = {
+      width: maxWidth,
+      height: maxWidth / aspectRatio,
+    }
   }
   else {
-    fullscreenImageWidth.value = maxHeight * aspectRatioOfImage
-    fullscreenImageHeight.value = maxHeight
+    fullscreenSize.value = {
+      width: maxHeight * aspectRatio,
+      height: maxHeight,
+    }
   }
+
+  // Calculate scale
+  const scale = fullscreenSize.value.width / imageSize.value.width
+
+  // Initialize transform from original position
+  // Image starts at: top: 50%, left: 50%
+  const centerX = window.innerWidth / 2
+  const centerY = window.innerHeight / 2
+  const originalCenterX = rect.left + rect.width / 2
+  const originalCenterY = rect.top + rect.height / 2
+
+  // Initial translate: move from screen center to original position
+  const initialTranslateX = originalCenterX - centerX
+  const initialTranslateY = originalCenterY - centerY
+
+  // Final translate: back to center (0, 0) after scaling
+  const finalTranslateX = 0
+  const finalTranslateY = 0
+
+  // Initialize transform at original position
+  transform.value = {
+    x: initialTranslateX,
+    y: initialTranslateY,
+    scale: 1,
+  }
+
+  fullscreenImage.value = photo
+  isFullscreen.value = true
+  isClosing.value = false
+  document.body.style.overflow = 'hidden'
+
+  // Animate to final transform (center with scale)
+  requestAnimationFrame(() => {
+    transform.value = {
+      x: finalTranslateX,
+      y: finalTranslateY,
+      scale,
+    }
+    isFullscreenReady.value = true
+  })
 }
 
 function closeFullscreen() {
-  isFullscreen.value = false
-  fullscreenImage.value = ''
+  isClosing.value = true
   isFullscreenReady.value = false
-  document.body.style.overflow = ''
-  originalImageTop.value = 0
-  originalImageLeft.value = 0
-  originalImageWidth.value = 0
-  originalImageHeight.value = 0
-  fullscreenImageWidth.value = 0
-  fullscreenImageHeight.value = 0
+
+  setTimeout(() => {
+    isFullscreen.value = false
+    fullscreenImage.value = ''
+    isClosing.value = false
+    document.body.style.overflow = ''
+  }, 300)
 }
 </script>
 
@@ -152,7 +206,7 @@ function closeFullscreen() {
           class="photo-image"
           @click="openFullscreen($event, photo)"
         >
-        <div v-else :style="{ width: `${originalImageWidth}px`, height: `${originalImageHeight}px` }" />
+        <div v-else :style="{ width: `${imageSize.width}px`, height: `${imageSize.height}px` }" />
       </template>
     </div>
   </div>
@@ -160,21 +214,19 @@ function closeFullscreen() {
   <Teleport to="body">
     <Transition name="fullscreen" mode="out-in" appear>
       <div v-if="isFullscreen" @click="closeFullscreen">
-        <div class="fullscreen-backdrop" />
+        <div class="fullscreen-backdrop" :style="{ opacity: isClosing ? 0 : 1 }" />
         <img
           :src="fullscreenImage"
-          :class="isFullscreenReady ? 'fullscreen-image done' : 'fullscreen-image'"
-          :style="isFullscreenReady
-            ? {
-              width: `${fullscreenImageWidth}px`,
-              height: `${fullscreenImageHeight}px`,
-            }
-            : {
-              top: `${originalImageTop}px`,
-              left: `${originalImageLeft}px`,
-              width: `${originalImageWidth}px`,
-              height: `${originalImageHeight}px`,
-            }"
+          class="fullscreen-image"
+          :width="imageSize.width"
+          :height="imageSize.height"
+          :style="{
+            top: '50%',
+            left: '50%',
+            transform: `translate(calc(-50% + ${transform.x}px), calc(-50% + ${transform.y}px)) scale(${transform.scale})`,
+            transformOrigin: 'center center',
+            opacity: isClosing ? 0 : 1,
+          }"
         >
       </div>
     </Transition>
@@ -201,7 +253,7 @@ function closeFullscreen() {
   display: block;
   width: 100%;
   height: auto;
-  animation: slide-in-up 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation: slide-in-up 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
 @keyframes slide-in-up {
@@ -219,14 +271,11 @@ function closeFullscreen() {
 .fullscreen-image {
   position: fixed;
   z-index: 10000;
-  transition: all 0.5s;
-  will-change: transform, top, left;
-}
-
-.fullscreen-image.done {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  transition:
+    transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    opacity 0.3s ease-out;
+  will-change: transform, opacity;
+  transform-origin: center center;
 }
 
 .fullscreen-leave-active {
@@ -247,6 +296,7 @@ function closeFullscreen() {
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   z-index: 9999;
+  transition: opacity 0.3s ease-out;
   animation: backdropFadeIn 0.3s ease-out;
 }
 
