@@ -213,7 +213,12 @@ function closeFullscreen() {
 
   <Teleport to="body">
     <Transition name="fullscreen" mode="out-in" appear>
-      <div v-if="isFullscreen" @click="closeFullscreen">
+      <div
+        v-if="isFullscreen"
+        class="fullscreen-overlay"
+        :style="{ pointerEvents: isClosing ? 'none' : 'auto' }"
+        @click="closeFullscreen"
+      >
         <div class="fullscreen-backdrop" :style="{ opacity: isClosing ? 0 : 1 }" />
         <img
           :src="fullscreenImage"
@@ -268,18 +273,22 @@ function closeFullscreen() {
   }
 }
 
+.fullscreen-overlay {
+  --preview-animation-duration: 0.3s;
+}
+
 .fullscreen-image {
   position: fixed;
   z-index: 10000;
   transition:
-    transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    opacity 0.3s ease-out;
+    transform var(--preview-animation-duration) cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    opacity var(--preview-animation-duration) ease-out;
   will-change: transform, opacity;
   transform-origin: center center;
 }
 
 .fullscreen-leave-active {
-  transition: all 0.3s ease-out;
+  transition: all var(--preview-animation-duration) ease-out;
 }
 
 .fullscreen-leave-to {
@@ -296,8 +305,8 @@ function closeFullscreen() {
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   z-index: 9999;
-  transition: opacity 0.3s ease-out;
-  animation: backdropFadeIn 0.3s ease-out;
+  transition: opacity var(--preview-animation-duration) ease-out;
+  animation: backdropFadeIn var(--preview-animation-duration) ease-out;
 }
 
 @keyframes backdropFadeIn {
