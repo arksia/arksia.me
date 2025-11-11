@@ -1,0 +1,5 @@
+/photos    /photos.html   200
+/posts     /posts.html    200
+/posts/*   /posts/:splat.html   200
+
+/*    /index.html   200
