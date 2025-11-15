@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "vite --open",
-    "build": "vite-ssg build && cp _redirects dist/_redirects",
+    "build": "vite-ssg build",
     "preview": "vite preview",
     "lint": "eslint --fix",
     "lint:style": "stylelint '**/*.{css,vue}' --fix"
