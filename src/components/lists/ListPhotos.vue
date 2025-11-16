@@ -2,13 +2,7 @@
 import { throttle } from '~/utils'
 import photos from '../../../photos/data'
 
-const tempElement = document.createElement('div')
-tempElement.style.width = '1rem'
-tempElement.style.position = 'absolute'
-tempElement.style.visibility = 'hidden'
-document.body.appendChild(tempElement)
-const remValue = tempElement.offsetWidth
-document.body.removeChild(tempElement)
+const remValue = ref(16) // default rem value is 16px (1rem)
 
 const masonryRef = ref<HTMLElement>()
 
@@ -42,6 +36,9 @@ const fullscreenSize = ref({
 
 // calculate columns
 function calculateColumns() {
+  if (typeof window === 'undefined') {
+    return
+  }
   const width = window.innerWidth
   let newColumnCount
 
@@ -67,6 +64,9 @@ function calculateColumns() {
 
 // relayout masonry
 function relayout() {
+  if (typeof window === 'undefined') {
+    return
+  }
   if (currentPhotoIndex.value >= photos.length) {
     return
   }
@@ -79,7 +79,7 @@ function relayout() {
   }
 
   const columnCount = columns.value.length
-  const columnWidth = (masonryRef.value.offsetWidth - (columnCount - 1) * remValue) / columnCount
+  const columnWidth = (masonryRef.value.offsetWidth - (columnCount - 1) * remValue.value) / columnCount
 
   while (currentPhotoIndex.value < photos.length && Math.min(...columnHeights.value) < scrollHeight) {
     const photo = photos[currentPhotoIndex.value]
@@ -92,7 +92,7 @@ function relayout() {
     const columnIndex = columnHeights.value.indexOf(Math.min(...columnHeights.value))
     columns.value[columnIndex].push(photo.url)
     const actualHeight = columnWidth * (ImageHeight / ImageWidth)
-    columnHeights.value[columnIndex] += actualHeight + remValue
+    columnHeights.value[columnIndex] += actualHeight + remValue.value
     currentPhotoIndex.value++
   }
 
@@ -102,6 +102,19 @@ function relayout() {
 }
 
 onMounted(() => {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return
+  }
+
+  // calculate rem value (only on client side)
+  const tempElement = document.createElement('div')
+  tempElement.style.width = '1rem'
+  tempElement.style.position = 'absolute'
+  tempElement.style.visibility = 'hidden'
+  document.body.appendChild(tempElement)
+  remValue.value = tempElement.offsetWidth
+  document.body.removeChild(tempElement)
+
   calculateColumns()
   relayout()
   window.addEventListener('resize', throttle(calculateColumns, 100))
@@ -109,11 +122,16 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  window.removeEventListener('resize', calculateColumns)
-  window.removeEventListener('scroll', relayout)
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('resize', calculateColumns)
+    window.removeEventListener('scroll', relayout)
+  }
 })
 
 function openFullscreen(event: MouseEvent, photo: string) {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return
+  }
   const target = event.target as HTMLImageElement
   const rect = target.getBoundingClientRect()
 
@@ -184,6 +202,9 @@ function openFullscreen(event: MouseEvent, photo: string) {
 }
 
 function closeFullscreen() {
+  if (typeof document === 'undefined') {
+    return
+  }
   isClosing.value = true
   isFullscreenReady.value = false
 
