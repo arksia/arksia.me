@@ -1,5 +1,6 @@
 ---
 title: <类型蠕动 class="ts">泛型
+draft: true
 date: 10/20/25
 duration: 8 min
 catalog: type-wriggle

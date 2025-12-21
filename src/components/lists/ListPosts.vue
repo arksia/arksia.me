@@ -3,7 +3,7 @@ import type { Post } from '~/types'
 
 const router = useRouter()
 const posts: Post[] = router.getRoutes()
-  .filter(i => i.path.startsWith('/posts/') && !i.meta.frontmatter.hidden)
+  .filter(i => i.path.startsWith('/posts/') && !i.meta.frontmatter.hidden && (import.meta.env.DEV || !i.meta.frontmatter.draft))
   .map(i => ({
     path: i.meta.frontmatter.redirect || i.path,
     title: i.meta.frontmatter.title,
